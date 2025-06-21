@@ -4,7 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio"
   },
   "keywords": [],
   "author": "",
@@ -20,5 +25,8 @@
     "pg": "^8.16.0",
     "prisma": "^6.10.1",
     "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
   }
 }
