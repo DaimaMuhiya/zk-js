@@ -1,5 +1,7 @@
-require("dotenv").config();
-const { getDeviceData } = require("../services/device.service");
+import dotenv from "dotenv";
+import { getDeviceData } from "../services/device.service.js";
+
+dotenv.config();
 
 (async () => {
   try {

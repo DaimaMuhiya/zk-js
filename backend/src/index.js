@@ -1,6 +1,12 @@
-const express = require("express");
-const winston = require("winston");
-const expressWinston = require("express-winston");
+import express from "express";
+import winston from "winston";
+import expressWinston from "express-winston";
+import dotenv from "dotenv";
+import cors from "cors";
+import attendanceRoutes from "./routes/attendance.routes.js";
+
+dotenv.config();
+console.log("IP:", process.env.DEVICE_IP); // Test de lecture
 
 // Création de l'application Express
 const app = express();
@@ -36,11 +42,10 @@ app.use(
 
 // Middlewares de base
 app.use(express.json());
+app.use(cors());
 
-// Exemple de route avec erreur
-app.get("/error-test", (req, res, next) => {
-  next(new Error("Erreur de test intentionnelle !"));
-});
+// Routes
+app.use("/api/attendances", attendanceRoutes);
 
 // Middleware de gestion des erreurs
 app.use(
