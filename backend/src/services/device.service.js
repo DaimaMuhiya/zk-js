@@ -47,19 +47,24 @@ export const getDeviceData = async () => {
       users: users.data.map((u) => {
         const roleMap = {
           0: "user",
+          1: "admin",
+          2: "superadmin",
           14: "admin",
-          999: "superadmin",
         };
         return {
-          uid: String(u.uid),
-          name: u.name || "Non renseigné",
+          uid: String(u.uid || u.userId),
+          name: u.name || u.employeeName || "Non renseigné",
           role: roleMap[u.role] || "invité",
-          cardno: u.cardno?.toString() || "",
+          cardno: u.cardno?.toString() || u.cardNumber?.toString() || "",
         };
       }),
       logs: logsResponse.data
         .map((l) => {
           const timestamp = moment(l.recordTime).tz("Indian/Reunion");
+          if (!timestamp.isValid()) {
+            console.warn(`Date invalide pour le log ${l.userSn}`, l.recordTime);
+            timestamp = moment().tz("Indian/Reunion"); // Date actuelle comme fallback
+          }
           return {
             uid: String(l.userSn || l.deviceUserId || "").padStart(6, "0"),
             timestamp: timestamp.isValid()
@@ -72,7 +77,7 @@ export const getDeviceData = async () => {
         })
         .filter((l) => {
           const year = moment(l.timestamp).year();
-          return year > 2000 && year < 2030;
+          return year >= 2000 && year <= 2040;
         }),
     };
   } catch (error) {
