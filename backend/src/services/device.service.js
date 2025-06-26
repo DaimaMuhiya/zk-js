@@ -60,16 +60,14 @@ export const getDeviceData = async () => {
       }),
       logs: logsResponse.data
         .map((l) => {
-          const timestamp = moment(l.recordTime).tz("Indian/Reunion");
+          const timestamp = moment.utc(l.recordTime);
           if (!timestamp.isValid()) {
             console.warn(`Date invalide pour le log ${l.userSn}`, l.recordTime);
-            timestamp = moment().tz("Indian/Reunion"); // Date actuelle comme fallback
+            timestamp = moment.utc();
           }
           return {
             uid: String(l.userSn || l.deviceUserId || "").padStart(6, "0"),
-            timestamp: timestamp.isValid()
-              ? timestamp.format()
-              : new Date().toISOString(), // Valeur par défaut si date invalide
+            timestamp: timestamp.toISOString(),
             status: l.state || 0,
             deviceSn: l.ip.split(".").join(""),
             rawData: l,

@@ -5,6 +5,9 @@ const prisma = new PrismaClient();
 
 export const syncDeviceData = async () => {
   try {
+    // Vérification connexion DB
+    await prisma.$queryRaw`SELECT 1`;
+
     const { users, logs } = await getDeviceData();
 
     // Synchronisation utilisateurs
@@ -28,10 +31,10 @@ export const syncDeviceData = async () => {
     );
 
     // Synchronisation logs
-    const validLogs = logs.filter(
-      (l) =>
-        l.timestamp && l.deviceSn && new Date(l.timestamp).getFullYear() > 2000
-    );
+    const validLogs = logs.filter((l) => {
+      const logDate = new Date(l.timestamp);
+      return logDate instanceof Date && !isNaN(logDate);
+    });
 
     console.log("Logs validés :", validLogs);
     console.log(

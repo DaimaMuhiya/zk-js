@@ -250,3 +250,11 @@
 {"level":"info","message":"Serveur démarré sur le port 4545","timestamp":"2025-06-26T21:56:22.223Z"}
 {"level":"info","message":"Serveur démarré sur le port 4545","timestamp":"2025-06-26T21:56:45.807Z"}
 {"level":"info","message":"GET /api/zkteco/users/ 200 2546ms","meta":{"req":{"headers":{"accept":"*/*","accept-encoding":"gzip, deflate, br","connection":"keep-alive","host":"localhost:4545","postman-token":"a5d42d6c-758c-484d-be68-d39ec23f7524","user-agent":"PostmanRuntime/7.44.1"},"httpVersion":"1.1","method":"GET","originalUrl":"/api/zkteco/users/","query":{},"url":"/api/zkteco/users/"},"res":{"statusCode":200},"responseTime":2546},"timestamp":"2025-06-26T21:57:20.809Z"}
+{"level":"info","message":"Serveur démarré sur le port 4545","timestamp":"2025-06-26T22:01:32.980Z"}
+{"level":"info","message":"Serveur démarré sur le port 4545","timestamp":"2025-06-26T22:02:12.879Z"}
+{"level":"info","message":"Serveur démarré sur le port 4545","timestamp":"2025-06-26T22:02:28.136Z"}
+{"level":"info","message":"Serveur démarré sur le port 4545","timestamp":"2025-06-26T22:09:07.379Z"}
+{"level":"info","message":"Serveur démarré sur le port 4545","timestamp":"2025-06-26T22:09:14.051Z"}
+{"level":"info","message":"Serveur démarré sur le port 4545","timestamp":"2025-06-26T22:09:23.850Z"}
+{"level":"info","message":"Serveur démarré sur le port 4545","timestamp":"2025-06-26T22:09:54.004Z"}
+{"level":"info","message":"GET /api/zkteco/users/ 200 2648ms","meta":{"req":{"headers":{"accept":"*/*","accept-encoding":"gzip, deflate, br","connection":"keep-alive","host":"localhost:4545","postman-token":"3f91ffc4-6ce5-4867-b8d8-54054a019b1b","user-agent":"PostmanRuntime/7.44.1"},"httpVersion":"1.1","method":"GET","originalUrl":"/api/zkteco/users/","query":{},"url":"/api/zkteco/users/"},"res":{"statusCode":200},"responseTime":2648},"timestamp":"2025-06-26T22:10:23.134Z"}
