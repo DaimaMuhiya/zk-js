@@ -191,3 +191,8 @@
 {"level":"info","message":"Serveur démarré sur le port 4545","timestamp":"2025-06-26T14:53:24.414Z"}
 {"level":"info","message":"Serveur démarré sur le port 4545","timestamp":"2025-06-26T14:53:29.914Z"}
 {"level":"info","message":"GET /api/attendances 200 2167ms","meta":{"req":{"headers":{"accept":"*/*","accept-encoding":"gzip, deflate, br","connection":"keep-alive","host":"localhost:4545","postman-token":"67a10ff5-75f0-44c0-b8a6-e3c7abb39022","user-agent":"PostmanRuntime/7.44.1"},"httpVersion":"1.1","method":"GET","originalUrl":"/api/attendances","query":{},"url":"/api/attendances"},"res":{"statusCode":200},"responseTime":2167},"timestamp":"2025-06-26T14:54:23.973Z"}
+{"level":"info","message":"Serveur démarré sur le port 4545","timestamp":"2025-06-26T14:57:54.878Z"}
+{"level":"info","message":"GET /api/attendances 200 2206ms","meta":{"req":{"headers":{"accept":"*/*","accept-encoding":"gzip, deflate, br","connection":"keep-alive","host":"localhost:4545","postman-token":"e32fa276-d077-4262-aafd-24aa65c409c1","user-agent":"PostmanRuntime/7.44.1"},"httpVersion":"1.1","method":"GET","originalUrl":"/api/attendances","query":{},"url":"/api/attendances"},"res":{"statusCode":200},"responseTime":2206},"timestamp":"2025-06-26T14:58:14.268Z"}
+{"level":"info","message":"Serveur démarré sur le port 4545","timestamp":"2025-06-26T14:58:58.480Z"}
+{"level":"info","message":"Serveur démarré sur le port 4545","timestamp":"2025-06-26T14:59:00.686Z"}
+{"level":"info","message":"Serveur démarré sur le port 4545","timestamp":"2025-06-26T14:59:13.250Z"}

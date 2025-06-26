@@ -58,13 +58,18 @@ export const getDeviceData = async () => {
         };
       }),
       logs: logsResponse.data
-        .map((l) => ({
-          uid: String(l.userSn || l.deviceUserId || "").padStart(6, "0"),
-          timestamp: moment(l.recordTime).tz("Indian/Reunion").format(),
-          status: l.state || 0,
-          deviceSn: l.ip.split(".").join(""),
-          rawData: l,
-        }))
+        .map((l) => {
+          const timestamp = moment(l.recordTime).tz("Indian/Reunion");
+          return {
+            uid: String(l.userSn || l.deviceUserId || "").padStart(6, "0"),
+            timestamp: timestamp.isValid()
+              ? timestamp.format()
+              : new Date().toISOString(), // Valeur par défaut si date invalide
+            status: l.state || 0,
+            deviceSn: l.ip.split(".").join(""),
+            rawData: l,
+          };
+        })
         .filter((l) => {
           const year = moment(l.timestamp).year();
           return year > 2000 && year < 2030;
