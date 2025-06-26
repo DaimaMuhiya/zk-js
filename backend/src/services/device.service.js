@@ -1,10 +1,11 @@
 import ZKLib from "node-zklib";
+import moment from "moment-timezone";
 
 export const getDeviceData = async () => {
   const zk = new ZKLib(
     process.env.DEVICE_IP,
     parseInt(process.env.DEVICE_PORT),
-    10000, // timeout
+    30000, // Timeout augmenté à 30s
     4000 // inport
   );
 
@@ -25,30 +26,49 @@ export const getDeviceData = async () => {
     console.log("Réponse brute des utilisateurs:", users);
 
     const logsResponse = await zk.getAttendances((percent, total) => {
-      console.log(`Progression: ${percent}% (${total} logs)`);
+      console.log(`Téléchargement ${total} logs...`);
     });
 
-    // Vérification structure des logs
-    if (!logsResponse?.data || !Array.isArray(logsResponse.data)) {
-      console.error("Structure logs inattendue:", logsResponse);
-      throw new Error("Format logs invalide");
+    // Debug complet des logs
+    console.log("Réponse logs brute:", JSON.stringify(logsResponse, null, 2));
+
+    if (!logsResponse?.data?.[0]?.recordTime) {
+      throw new Error("Format de timestamp invalide");
+    }
+
+    if (logsResponse.data.some((l) => l.recordTime.getFullYear() < 2000)) {
+      console.warn("⚠️ Logs avec dates invalides détectés");
+      await zk.clearAttendanceLog(); // Nettoyage des logs corrompus
     }
 
     await zk.disconnect();
 
     return {
-      users: users.data.map((u) => ({
-        uid: u.userId || u.uid,
-        name: u.name || "",
-        role: u.role || 0,
-        cardno: u.cardno || "",
-      })),
-      logs: logsResponse.data.map((l) => ({
-        uid: l.uid,
-        timestamp: l.timestamp,
-        status: l.state,
-        deviceSn: l.sn || null,
-      })),
+      users: users.data.map((u) => {
+        const roleMap = {
+          0: "user",
+          14: "admin",
+          999: "superadmin",
+        };
+        return {
+          uid: u.uid,
+          name: u.name || "Non renseigné",
+          role: roleMap[u.role] || "invité",
+          cardno: u.cardno?.toString() || "",
+        };
+      }),
+      logs: logsResponse.data
+        .filter((l) => {
+          const year = l.recordTime.getFullYear();
+          return year > 2000 && year < 2030; // Filtre strict
+        })
+        .map((l) => ({
+          uid: String(l.userSn || "").padStart(6, "0"),
+          timestamp: moment(l.recordTime).tz("Indian/Reunion").format(),
+          status: l.state || 0,
+          deviceSn: l.sn || "N/A",
+          rawData: l,
+        })),
     };
   } catch (error) {
     if (error.code === "EADDRINUSE") {
