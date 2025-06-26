@@ -1,8 +1,9 @@
-const { getDeviceData } = require("./device.service");
-const { PrismaClient } = require("@prisma/client");
+import { getDeviceData } from "./device.service.js";
+import { PrismaClient } from "@prisma/client";
+
 const prisma = new PrismaClient();
 
-const syncDeviceData = async () => {
+export const syncDeviceData = async () => {
   try {
     const { users, logs } = await getDeviceData();
 
@@ -10,37 +11,53 @@ const syncDeviceData = async () => {
     await prisma.$transaction(
       users.map((user) =>
         prisma.user.upsert({
-          where: { deviceUserId: user.uid },
+          where: { deviceUserId: String(user.uid) },
           update: user,
-          create: user,
+          create: {
+            deviceUserId: String(user.uid),
+            name: user.name,
+            role: user.role,
+            cardno: user.cardno,
+          },
         })
       )
     );
 
     // Synchronisation logs
-    for (const log of logs) {
-      const user = await prisma.user.findUnique({
-        where: { deviceUserId: log.uid },
-      });
+    const validLogs = logs.filter((l) => l.timestamp && l.deviceSn);
 
-      if (user) {
-        await prisma.attendance.upsert({
-          where: {
-            userId_timestamp: {
-              userId: user.id,
-              timestamp: log.timestamp,
-            },
-          },
-          update: log,
-          create: {
-            userId: user.id,
-            ...log,
-          },
+    for (const log of validLogs) {
+      try {
+        const user = await prisma.user.findUnique({
+          where: { deviceUserId: String(log.uid) },
         });
+
+        if (user) {
+          await prisma.attendance.upsert({
+            where: {
+              userId_timestamp: {
+                userId: user.id,
+                timestamp: new Date(log.timestamp),
+              },
+            },
+            update: log,
+            create: {
+              userId: user.id,
+              timestamp: new Date(log.timestamp),
+              status: log.status,
+              deviceSn: log.deviceSn,
+              rawData: log.rawData,
+            },
+          });
+        }
+      } catch (logError) {
+        console.error(`Erreur log ${log.uid}:`, logError);
       }
     }
 
-    console.log(`Synchronisé: ${users.length} users, ${logs.length} logs`);
+    console.log(
+      `Synchronisé: ${users.length} users, ${validLogs.length}/${logs.length} logs valides`
+    );
   } catch (error) {
     console.error("Erreur synchronisation:", error);
   } finally {
@@ -48,4 +65,7 @@ const syncDeviceData = async () => {
   }
 };
 
-module.exports = { syncDeviceData };
+// Déclenchement immédiat pour le test manuel
+(async () => {
+  await syncDeviceData();
+})();

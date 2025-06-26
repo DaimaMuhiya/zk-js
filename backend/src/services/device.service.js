@@ -51,7 +51,7 @@ export const getDeviceData = async () => {
           999: "superadmin",
         };
         return {
-          uid: u.uid,
+          uid: String(u.uid),
           name: u.name || "Non renseigné",
           role: roleMap[u.role] || "invité",
           cardno: u.cardno?.toString() || "",

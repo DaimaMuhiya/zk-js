@@ -14,21 +14,21 @@ datasource db {
 }
 
 model User {
-  id          Int      @id @default(autoincrement())
-  deviceUserId Int      @unique
-  name        String
-  cardNumber  String?
-  role        Int?     
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  attendances Attendance[]
+  id           Int       @id @default(autoincrement())
+  deviceUserId String    @unique
+  name         String
+  role         String
+  cardno       String
+  attendances  Attendance[]
 }
 
 model Attendance {
   id          Int      @id @default(autoincrement())
-  userId      Int
   timestamp   DateTime
-  status      Int      
+  status      Int
+  deviceSn    String
+  rawData     Json?
+  userId      Int
   user        User     @relation(fields: [userId], references: [id])
 
   @@unique([userId, timestamp])
