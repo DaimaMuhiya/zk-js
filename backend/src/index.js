@@ -3,7 +3,7 @@ import winston from "winston";
 import expressWinston from "express-winston";
 import dotenv from "dotenv";
 import cors from "cors";
-import attendanceRoutes from "./routes/attendance.routes.js";
+import appRoutes from "./routes/app.routes.js";
 
 dotenv.config();
 console.log("IP:", process.env.DEVICE_IP); // Test de lecture
@@ -45,7 +45,7 @@ app.use(express.json());
 app.use(cors());
 
 // Routes
-app.use("/api/attendances", attendanceRoutes);
+app.use("/api/zkteco", appRoutes);
 
 // Middleware de gestion des erreurs
 app.use(

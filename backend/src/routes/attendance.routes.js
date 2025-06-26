@@ -1,8 +1,8 @@
-import express from "express";
+import { Router } from "express";
 import { getAttendances } from "../controllers/attendance.controller.js";
 
-const router = express.Router();
+const attendanceRoutes = Router();
 
-router.get("/", getAttendances);
+attendanceRoutes.get("/", getAttendances);
 
-export default router;
+export default attendanceRoutes;
