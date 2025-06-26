@@ -12,7 +12,11 @@ export const syncDeviceData = async () => {
       users.map((user) =>
         prisma.user.upsert({
           where: { deviceUserId: String(user.uid) },
-          update: user,
+          update: {
+            name: user.name,
+            role: user.role,
+            cardno: user.cardno,
+          },
           create: {
             deviceUserId: String(user.uid),
             name: user.name,
@@ -24,7 +28,16 @@ export const syncDeviceData = async () => {
     );
 
     // Synchronisation logs
-    const validLogs = logs.filter((l) => l.timestamp && l.deviceSn);
+    const validLogs = logs.filter(
+      (l) =>
+        l.timestamp && l.deviceSn && new Date(l.timestamp).getFullYear() > 2000
+    );
+
+    console.log("Logs validés :", validLogs);
+    console.log(
+      "Logs rejetés :",
+      logs.filter((l) => !validLogs.includes(l))
+    );
 
     for (const log of validLogs) {
       try {

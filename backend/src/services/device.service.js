@@ -58,17 +58,17 @@ export const getDeviceData = async () => {
         };
       }),
       logs: logsResponse.data
-        .filter((l) => {
-          const year = l.recordTime.getFullYear();
-          return year > 2000 && year < 2030; // Filtre strict
-        })
         .map((l) => ({
-          uid: String(l.userSn || "").padStart(6, "0"),
+          uid: String(l.userSn || l.deviceUserId || "").padStart(6, "0"),
           timestamp: moment(l.recordTime).tz("Indian/Reunion").format(),
           status: l.state || 0,
-          deviceSn: l.sn || "N/A",
+          deviceSn: l.ip.split(".").join(""),
           rawData: l,
-        })),
+        }))
+        .filter((l) => {
+          const year = moment(l.timestamp).year();
+          return year > 2000 && year < 2030;
+        }),
     };
   } catch (error) {
     if (error.code === "EADDRINUSE") {
