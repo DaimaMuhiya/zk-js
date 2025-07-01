@@ -36,7 +36,7 @@ export const syncDeviceData = async () => {
       return logDate instanceof Date && !isNaN(logDate);
     });
 
-    console.log("Logs validés :", validLogs);
+    console.log("# Logs validés (synchronisation logs) :", validLogs);
     console.log(
       "Logs rejetés :",
       logs.filter((l) => !validLogs.includes(l))
