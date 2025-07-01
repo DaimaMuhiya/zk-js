@@ -56,13 +56,17 @@ export const syncDeviceData = async () => {
             where: {
               userId_timestamp: {
                 userId: user.id,
-                timestamp: new Date(log.timestamp),
+                timestamp: log.timestamp,
               },
             },
-            update: log,
+            update: {
+              status: log.status,
+              deviceSn: log.deviceSn,
+              rawData: log.rawData,
+            },
             create: {
               userId: user.id,
-              timestamp: new Date(log.timestamp),
+              timestamp: log.timestamp,
               status: log.status,
               deviceSn: log.deviceSn,
               rawData: log.rawData,

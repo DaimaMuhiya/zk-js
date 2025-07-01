@@ -26,14 +26,14 @@ model User {
 }
 
 model Attendance {
-  id          Int      @id @default(autoincrement())
-  timestamp   DateTime
+  userId      Int      @map("user_id")
+  timestamp   DateTime @map("timestamp")
   status      Int
-  deviceSn    String
-  rawData     Json?
-  userId      Int
+  deviceSn    String   @map("device_sn")
+  rawData     Json     @map("raw_data")
   user        User     @relation(fields: [userId], references: [id])
 
-  @@unique([userId, timestamp])
+  @@id([userId, timestamp])
+  @@map("attendances")
 }
 
