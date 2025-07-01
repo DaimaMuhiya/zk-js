@@ -10,9 +10,10 @@ export const getUsers = async (req, res) => {
         name: true,
         role: true,
         cardno: true,
-        _count: {
+        attendances: {
           select: {
-            attendances: true,
+            timestamp: true,
+            status: true,
           },
         },
       },
@@ -21,7 +22,12 @@ export const getUsers = async (req, res) => {
       },
     });
 
-    res.json(users);
+    res.json(
+      users.map((user) => ({
+        ...user,
+        lastAttendance: user.attendances[0]?.timestamp || null,
+      }))
+    );
   } catch (error) {
     console.error("Erreur:", error);
     res.status(500).json({ error: "Erreur serveur" });

@@ -4,11 +4,11 @@ import expressWinston from "express-winston";
 import dotenv from "dotenv";
 import cors from "cors";
 import appRoutes from "./routes/app.routes.js";
+import { startSynchronization } from "./services/cron.service.js";
 
 dotenv.config();
 console.log("IP:", process.env.DEVICE_IP); // Test de lecture
 
-// Création de l'application Express
 const app = express();
 
 // Configuration du logger Winston
@@ -76,4 +76,5 @@ process.on("unhandledRejection", (reason) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   logger.info(`Serveur démarré sur le port ${PORT}`);
+  startSynchronization();
 });

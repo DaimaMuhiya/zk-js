@@ -1,5 +1,6 @@
 import { getDeviceData } from "./device.service.js";
 import { PrismaClient } from "@prisma/client";
+import cron from "node-cron";
 
 const prisma = new PrismaClient();
 
@@ -81,7 +82,11 @@ export const syncDeviceData = async () => {
   }
 };
 
-// Déclenchement immédiat pour le test manuel
-(async () => {
-  await syncDeviceData();
-})();
+export const startSynchronization = () => {
+  // Exécution immédiate + toutes les heures
+  syncDeviceData();
+  cron.schedule("0 * * * *", syncDeviceData);
+};
+
+// Déclenchement immédiat pour le test
+startSynchronization();
