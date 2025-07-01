@@ -51,22 +51,24 @@ export const getDeviceData = async () => {
           2: "superadmin",
           14: "admin",
         };
+        const uid = String(u.uid || u.userId).replace(/^0+/, "");
         return {
-          uid: String(u.uid || u.userId),
-          name: u.name || u.employeeName || "Non renseigné",
-          role: roleMap[u.role] || "invité",
-          cardno: u.cardno?.toString() || u.cardNumber?.toString() || "",
+          uid: uid,
+          name: u.name || "Non renseigné",
+          role: roleMap[u.role] || "user",
+          cardno: u.cardno?.toString() || "",
         };
       }),
       logs: logsResponse.data
         .map((l) => {
+          const uid = String(l.userSn || l.deviceUserId).replace(/^0+/, "");
           const timestamp = moment.utc(l.recordTime);
           if (!timestamp.isValid()) {
-            console.warn(`Date invalide pour le log ${l.userSn}`, l.recordTime);
+            console.warn(`Date invalide pour le log ${uid}`, l.recordTime);
             timestamp = moment.utc();
           }
           return {
-            uid: String(l.userSn || l.deviceUserId || "").padStart(6, "0"),
+            uid: uid,
             timestamp: timestamp.toISOString(),
             status: l.state || 0,
             deviceSn: l.ip.split(".").join(""),
