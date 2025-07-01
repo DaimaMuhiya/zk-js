@@ -4,6 +4,7 @@ const prisma = new PrismaClient();
 export const getUsers = async (req, res) => {
   try {
     const users = await prisma.user.findMany({
+      where: { synced: true },
       include: {
         attendances: {
           select: {

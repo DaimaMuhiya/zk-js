@@ -12,24 +12,26 @@ export const syncDeviceData = async () => {
     const { users, logs } = await getDeviceData();
 
     // Synchronisation utilisateurs
-    await prisma.$transaction(
-      users.map((user) =>
+    await prisma.$transaction([
+      ...users.map((user) =>
         prisma.user.upsert({
-          where: { deviceUserId: String(user.uid) },
+          where: { deviceUserId: user.uid },
           update: {
             name: user.name,
             role: user.role,
             cardno: user.cardno,
+            updatedAt: new Date(),
           },
           create: {
-            deviceUserId: String(user.uid),
+            deviceUserId: user.uid,
             name: user.name,
             role: user.role,
             cardno: user.cardno,
           },
         })
-      )
-    );
+      ),
+      prisma.$executeRaw`UPDATE "public"."User" SET "synced" = true`,
+    ]);
 
     // Synchronisation logs
     const validLogs = logs.filter((l) => {
